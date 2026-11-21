@@ -439,7 +439,7 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
    ===================================================================== */
 .toast-region {
   position: fixed;
-  right: var(--s4);
+  left: var(--s4);
   bottom: var(--s4);
   display: flex;
   flex-direction: column;
@@ -458,9 +458,141 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 }
 .toast.success { border-left-color: var(--ok); }
 .toast.warn { background: var(--warn-bg); color: var(--warn-ink); border-left-color: var(--high); }
+
+/* =====================================================================
+   8. HOOK: MEETING REMINDER DIALOG (consistent with the board's tiles)
+   ===================================================================== */
+.backdrop.meeting { z-index: 60; align-items: center; }
+.meeting .modal { max-width: 440px; padding: 0; overflow: hidden; }
+.meeting-hero {
+  padding: var(--s5);
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink);
+}
+.meeting-hero .eyebrow { opacity: .9; }
+.meeting-hero h2 { margin: var(--s3) 0 0; font-size: 1.5rem; line-height: 1.2; letter-spacing: -.02em; }
+.meeting-body { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s4); }
+.meeting-facts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); margin: 0; }
+.meeting-facts div { background: var(--layer-2); border-radius: var(--radius-md); padding: var(--s3) var(--s4); }
+.meeting-facts dt { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.meeting-facts dd { margin: var(--s1) 0 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -.01em; }
+.meeting-mandatory { margin: 0; padding: var(--s3) var(--s4); border-radius: var(--radius-md); background: var(--crit-bg); color: var(--crit); font-weight: 600; font-size: .9rem; }
+.meeting-body .btn { align-self: flex-end; }
+
+/* =====================================================================
+   9. HOOK: CYBERPUNK CHATBOT WIDGET (bottom-right)
+   ===================================================================== */
+.cb {
+  --neon: #19f2e6;
+  --neon-2: #ff2bd6;
+  --cb-bg: #090a12;
+  --cb-ink: #d7fbf8;
+  --cb-dim: #7fa9a6;
+  position: fixed;
+  right: var(--s5);
+  bottom: var(--s5);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s3);
+}
+.cb-launch {
+  width: 64px; height: 64px;
+  padding: var(--s2);
+  border-radius: 50%;
+  border: 1px solid var(--neon);
+  background: var(--cb-bg);
+  color: var(--neon);
+  box-shadow: 0 0 0 1px rgba(25, 242, 230, .2), 0 0 20px rgba(25, 242, 230, .45), 0 0 44px rgba(255, 43, 214, .28);
+  transition: transform .2s var(--spring), box-shadow .2s;
+}
+.cb-launch:hover { transform: scale(1.08) rotate(-3deg); }
+.cb-launch:focus-visible { outline-color: var(--neon-2); outline-offset: 4px; }
+.cb-avatar { width: 100%; height: 100%; display: block; }
+.cb-panel {
+  width: min(380px, calc(100vw - 2 * var(--s4)));
+  height: min(520px, calc(100vh - 140px));
+  display: flex;
+  flex-direction: column;
+  background: var(--cb-bg);
+  color: var(--cb-ink);
+  border: 1px solid var(--neon);
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 1px rgba(25, 242, 230, .15), 0 0 32px rgba(25, 242, 230, .25), 0 0 64px rgba(255, 43, 214, .18), var(--shadow-lg);
+  overflow: hidden;
+  transform-origin: bottom right;
+  position: relative;
+}
+.cb-panel[hidden] { display: none; }
+.cb-panel::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .03) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+}
+.cb-head { display: flex; align-items: center; gap: var(--s3); padding: var(--s3) var(--s4); border-bottom: 1px solid rgba(25, 242, 230, .25); }
+.cb-head .cb-avatar { width: 40px; height: 40px; color: var(--neon); flex: none; }
+.cb-title { flex: 1; min-width: 0; }
+.cb-title b { display: block; font-family: var(--mono); font-size: .9rem; letter-spacing: .12em; text-transform: uppercase; color: var(--neon); text-shadow: 0 0 8px rgba(25, 242, 230, .6); }
+.cb-title span { font-size: .72rem; color: var(--cb-dim); }
+.cb-title span::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 6px var(--neon); }
+.cb-icon { background: transparent; border: 1px solid rgba(25, 242, 230, .3); color: var(--neon); border-radius: var(--radius-sm); width: 32px; height: 32px; font-size: .95rem; line-height: 1; transition: background-color .15s; }
+.cb-icon:hover { background: rgba(25, 242, 230, .14); }
+.cb-icon[aria-pressed="true"] { color: var(--neon-2); border-color: var(--neon-2); }
+.cb-panel :focus-visible { outline-color: var(--neon-2); }
+.cb-log { flex: 1; overflow-y: auto; padding: var(--s4); display: flex; flex-direction: column; gap: var(--s3); font-family: var(--mono); font-size: .82rem; line-height: 1.5; }
+.cb-msg { max-width: 92%; padding: var(--s2) var(--s3); border-radius: var(--radius-md); overflow-wrap: anywhere; }
+.cb-msg.bot { align-self: flex-start; border: 1px solid rgba(25, 242, 230, .35); background: rgba(25, 242, 230, .06); }
+.cb-msg.user { align-self: flex-end; border: 1px solid rgba(255, 43, 214, .5); background: rgba(255, 43, 214, .08); color: #ffd6f7; }
+.cb-msg p { margin: 0; }
+.cb-msg p + p { margin-top: var(--s2); }
+.cb-src { display: block; margin-top: var(--s2); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cb-dim); }
+.cb-typing span { display: inline-block; width: 6px; height: 6px; margin-right: 4px; border-radius: 50%; background: var(--neon); }
+.cb-chips { display: flex; flex-wrap: wrap; gap: var(--s2); padding: 0 var(--s4) var(--s3); }
+.cb-chip { background: transparent; border: 1px solid rgba(255, 43, 214, .5); color: #ffb8f1; border-radius: 999px; padding: 2px var(--s3); font-size: .72rem; font-family: var(--mono); transition: background-color .15s; }
+.cb-chip:hover { background: rgba(255, 43, 214, .15); }
+.cb-form { display: flex; gap: var(--s2); padding: var(--s3) var(--s4) var(--s4); border-top: 1px solid rgba(25, 242, 230, .25); }
+.cb-form input { flex: 1; background: rgba(25, 242, 230, .06); border: 1px solid rgba(25, 242, 230, .3); color: var(--cb-ink); font-family: var(--mono); font-size: .85rem; border-radius: var(--radius-sm); }
+.cb-form input::placeholder { color: var(--cb-dim); }
+.cb-form input:hover, .cb-form input:focus { background: rgba(25, 242, 230, .12); border-color: var(--neon); }
+.cb-send { background: var(--neon); color: #04201e; border: 0; border-radius: var(--radius-sm); padding: 0 var(--s4); font-weight: 700; font-family: var(--mono); transition: transform .15s var(--spring), box-shadow .15s; }
+.cb-send:hover { box-shadow: 0 0 16px rgba(25, 242, 230, .6); transform: translateY(-1px); }
+
+@keyframes cbPulse { 0% { box-shadow: 0 0 0 0 rgba(25, 242, 230, .55), 0 0 20px rgba(25, 242, 230, .45); } 100% { box-shadow: 0 0 0 18px rgba(25, 242, 230, 0), 0 0 20px rgba(25, 242, 230, .45); } }
+@keyframes cbGlitch { 0%, 92%, 100% { transform: none; } 94% { transform: translate(-2px, 1px); } 96% { transform: translate(2px, -1px); } 98% { transform: translate(-1px, 0); } }
+@keyframes cbOpen { from { opacity: 0; transform: translateY(16px) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes cbMsg { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes cbDot { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+@keyframes cbEyes { 0%, 90%, 100% { opacity: 1; } 93% { opacity: .15; } }
+@media (prefers-reduced-motion: no-preference) {
+  .cb-launch { animation: cbPulse 2.4s ease-out infinite; }
+  .cb-launch .cb-avatar { animation: cbGlitch 6s steps(1) infinite; }
+  .cb-eyes { animation: cbEyes 5s infinite; }
+  .cb-panel:not([hidden]) { animation: cbOpen .35s var(--spring); }
+  .cb-msg { animation: cbMsg .3s var(--ease-out); }
+  .cb-typing span { animation: cbDot 1s infinite; }
+  .cb-typing span:nth-child(2) { animation-delay: .15s; }
+  .cb-typing span:nth-child(3) { animation-delay: .3s; }
+}
+@media (max-width: 767px) {
+  .cb { right: var(--s3); bottom: var(--s3); }
+  .meeting-facts { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+<!-- Cyberpunk avatar sprite (inline SVG, no image files) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="cb-avatar" viewBox="0 0 64 64">
+    <path d="M32 4 52 14v22c0 11-9 20-20 24C21 56 12 47 12 36V14z" fill="#0d0f1c" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M32 4v8M24 8l4 4M40 8l-4 4" stroke="#ff2bd6" stroke-width="2" stroke-linecap="round"/>
+    <rect x="17" y="22" width="30" height="11" rx="3" fill="#050611" stroke="#ff2bd6" stroke-width="1.5"/>
+    <g class="cb-eyes"><rect x="21" y="25" width="8" height="5" rx="1" fill="currentColor"/><rect x="35" y="25" width="8" height="5" rx="1" fill="currentColor"/></g>
+    <path d="M22 44h20M26 49h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".75"/>
+    <path d="M12 26H7M52 26h5" stroke="#ff2bd6" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+</svg>
 <div class="page">
 
 <!-- ===================== HERO BENTO ===================== -->
@@ -582,6 +714,46 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 
 <!-- ===================== TOAST REGION ===================== -->
 <div class="toast-region" id="toast-region" aria-live="polite"></div>
+
+
+<!-- ===================== HOOK: MEETING REMINDER ===================== -->
+<div class="backdrop meeting" id="meeting-backdrop" hidden>
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="meeting-title" aria-describedby="meeting-desc">
+    <div class="meeting-hero">
+      <span class="eyebrow">IT PMO · Announcement</span>
+      <h2 id="meeting-title">IT meeting next week</h2>
+    </div>
+    <div class="meeting-body">
+      <dl class="meeting-facts" id="meeting-desc">
+        <div><dt>Time</dt><dd id="meeting-time">10:00 AM</dd></div>
+        <div><dt>Location</dt><dd id="meeting-room">Room 888</dd></div>
+      </dl>
+      <p class="meeting-mandatory">Attendance is mandatory.</p>
+      <button type="button" class="btn btn-solid" id="meeting-ok">I will attend</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== HOOK: CHATBOT WIDGET ===================== -->
+<aside class="cb" id="cb" aria-label="IT assistant chatbot">
+  <section class="cb-panel" id="cb-panel" role="dialog" aria-labelledby="cb-name" hidden>
+    <header class="cb-head">
+      <svg class="cb-avatar" aria-hidden="true"><use href="#cb-avatar"></use></svg>
+      <div class="cb-title"><b id="cb-name">Neon-IT</b><span>IT assistant · online</span></div>
+      <button type="button" class="cb-icon" id="cb-mute" aria-pressed="false" aria-label="Mute voice" title="Mute voice">&#9835;</button>
+      <button type="button" class="cb-icon" id="cb-close" aria-label="Close chat">&times;</button>
+    </header>
+    <div class="cb-log" id="cb-log" role="log" aria-live="polite"></div>
+    <div class="cb-chips" id="cb-chips"></div>
+    <form class="cb-form" id="cb-form" autocomplete="off">
+      <input type="text" id="cb-input" maxlength="200" placeholder="Ask about tasks, policies, meetings…" aria-label="Message to IT assistant">
+      <button type="submit" class="cb-send">SEND</button>
+    </form>
+  </section>
+  <button type="button" class="cb-launch" id="cb-launch" aria-expanded="false" aria-controls="cb-panel" aria-label="Open IT assistant chat">
+    <svg class="cb-avatar" aria-hidden="true"><use href="#cb-avatar"></use></svg>
+  </button>
+</aside>
 
 <script>
 "use strict";
@@ -1072,6 +1244,222 @@ function init() {
 }
 
 init();
+
+/* =====================================================================
+   HOOKS (v2) — see .claude/hooks/*.md
+   1. meeting-reminder : dialog after 10 s on the page
+   2. chatbot-voice    : text RAG chatbot; opening it speaks a greeting
+   ===================================================================== */
+const MEETING = { delayMs: 10000 };
+const VOICE_GREETING = "I am your IT assistant, how can I help you?";
+
+/* ---------- Hook 1: meeting reminder ---------- */
+function initMeetingHook() {
+  const dlg = document.getElementById("meeting-backdrop");
+  const ok = document.getElementById("meeting-ok");
+  let returnFocus = null;
+  function close() {
+    dlg.hidden = true;
+    if (returnFocus && returnFocus.focus) returnFocus.focus();
+  }
+  function show() {
+    // Never stack on top of the Add Task modal: wait until it is closed.
+    if (!document.getElementById("backdrop").hidden) { setTimeout(show, 1000); return; }
+    returnFocus = document.activeElement;
+    dlg.hidden = false;
+    ok.focus();
+  }
+  ok.addEventListener("click", close);
+  dlg.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") close();
+    else if (e.key === "Tab") e.preventDefault(); // single focusable control: keep focus inside
+  });
+  setTimeout(show, MEETING.delayMs);
+}
+
+/* ---------- Hook 2: chatbot (client-side RAG) + voice ---------- */
+const CB_STOP = new Set(("a an the is are was were be been am i me my we you your it its of to in on at for and or do does did " +
+  "how what when where who which can could should would will please tell about with this that there any some").split(" "));
+
+const CB_KB = [
+  { title: "IT meeting", text: "There is an IT meeting next week at 10:00 AM in Room 888. Attendance is mandatory." },
+  { title: "Adding a task", text: "Click + Add Task. Title, Assignee and Due Date are required; choose project, category, priority and status, then press Add Task. The card appears at once and a notification email is sent to the PMO." },
+  { title: "Moving a task", text: "Drag a card onto another column. For keyboard use, focus the card and pick a column from its Move menu." },
+  { title: "Deleting a task", text: "Hover over a card and click the × button, then confirm with Yes. Deleting cannot be undone." },
+  { title: "Filtering", text: "Use the filter bar to narrow the board by project, assignee name or priority. Press Clear to reset the filters." },
+  { title: "Priorities", text: "Tasks have four priorities: Critical, High, Medium and Low. Critical is the most urgent and is flagged in red; every priority label is shown as text on the card." },
+  { title: "Statuses", text: "Backlog means logged but not yet scheduled. In Progress means actively being worked. Blocked means waiting on a dependency, vendor or approval. Done means completed or closed." },
+  { title: "Overdue", text: "A task is overdue when its due date is in the past and it is not Done. Overdue tasks carry a red Overdue badge and are counted in the Overdue tile." },
+  { title: "Task IDs", text: "Every task gets an ID in the format UOB-ITPM-0001, incrementing with each new task." },
+  { title: "Demo mode", text: "The board is a demo. Data is held in memory only, and refreshing the page resets it to the seeded tasks." },
+  { title: "Data handling", text: "Each new task is emailed to the PMO through a third-party form service. Do not enter real customer data or confidential information." }
+];
+
+function cbTokenize(str) {
+  return (String(str).toLowerCase().match(/[a-z0-9]+/g) || [])
+    .filter(function (w) { return !CB_STOP.has(w); })
+    .map(function (w) { return w.length > 3 && w.charAt(w.length - 1) === "s" ? w.slice(0, -1) : w; });
+}
+
+// Live documents: the board summary plus one document per task, rebuilt on every question.
+function cbBoardDocs() {
+  const all = state.tasks;
+  const by = function (s) { return all.filter(function (t) { return t.status === s; }).length; };
+  const overdue = all.filter(isOverdue);
+  const load = {};
+  all.forEach(function (t) { if (t.status !== "Done") load[t.assignee] = (load[t.assignee] || 0) + 1; });
+  const loadText = Object.keys(load).map(function (n) { return n + " " + load[n]; }).join(", ") || "none";
+  const summary = "Board summary: " + all.length + " tasks in total. Backlog " + by("Backlog") + ", In Progress " + by("In Progress") +
+    ", Blocked " + by("Blocked") + ", Done " + by("Done") + ". Overdue " + overdue.length +
+    (overdue.length ? " (" + overdue.map(function (t) { return t.id; }).join(", ") + ")" : "") +
+    ". Open tasks per assignee: " + loadText + ".";
+  const docs = [{ title: "Board summary", text: summary + " count how many total overdue blocked progress backlog done workload assignee status" }];
+  docs[0].answer = summary;
+  all.forEach(function (t) {
+    const line = t.id + " " + t.title + ": " + t.description + " Project " + t.project + ", category " + t.category +
+      ", assigned to " + t.assignee + ", priority " + t.priority + ", status " + t.status + ", due " + formatDate(t.dueDate) +
+      (isOverdue(t) ? " (overdue)" : "") + ".";
+    docs.push({ title: t.id, text: line, answer: line });
+  });
+  return docs;
+}
+
+function cbRetrieve(query, k) {
+  const docs = CB_KB.map(function (d) { return { title: d.title, text: d.text, answer: d.text }; }).concat(cbBoardDocs());
+  const q = cbTokenize(query);
+  if (!q.length) return [];
+  const toks = docs.map(function (d) { return cbTokenize(d.title + " " + d.text); });
+  const N = docs.length;
+  const avg = toks.reduce(function (a, t) { return a + t.length; }, 0) / N;
+  const df = {};
+  toks.forEach(function (t) { new Set(t).forEach(function (w) { df[w] = (df[w] || 0) + 1; }); });
+  const scored = docs.map(function (d, i) {
+    const tf = {};
+    toks[i].forEach(function (w) { tf[w] = (tf[w] || 0) + 1; });
+    let score = 0;
+    q.forEach(function (w) {
+      if (!tf[w]) return;
+      const idf = Math.log(1 + (N - df[w] + 0.5) / (df[w] + 0.5));
+      score += idf * (tf[w] * 2.5) / (tf[w] + 1.5 * (0.25 + 0.75 * toks[i].length / avg));
+    });
+    return { doc: d, score: score };
+  }).filter(function (r) { return r.score > 0; });
+  scored.sort(function (a, b) { return b.score - a.score; });
+  return scored.slice(0, k);
+}
+
+function cbAnswer(query) {
+  if (/^\s*(hi|hello|hey|yo)\b/i.test(query)) return [{ text: "Hello. Ask me about tasks, deadlines, the IT meeting or how the board works." }];
+  const hits = cbRetrieve(query, 3);
+  if (!hits.length || hits[0].score < 1) {
+    return [{ text: "No match in my knowledge base. Try asking about a task, who owns it, what is overdue, or how to add or move a task." }];
+  }
+  return hits.filter(function (h) { return h.score >= hits[0].score * 0.5; })
+    .map(function (h) { return { text: h.doc.answer, src: h.doc.title }; });
+}
+
+function initChatbot() {
+  const launch = document.getElementById("cb-launch");
+  const panel = document.getElementById("cb-panel");
+  const log = document.getElementById("cb-log");
+  const form = document.getElementById("cb-form");
+  const input = document.getElementById("cb-input");
+  const muteBtn = document.getElementById("cb-mute");
+  const chips = document.getElementById("cb-chips");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let muted = false;
+  let greeted = false;
+
+  function speak(text) {
+    if (muted || !("speechSynthesis" in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US";
+      u.pitch = 0.8;
+      window.speechSynthesis.speak(u);
+    } catch (err) { /* voice is optional: never break the page */ }
+  }
+
+  function addMsg(role, parts) {
+    const box = document.createElement("div");
+    box.className = "cb-msg " + role;
+    parts.forEach(function (p) {
+      const para = document.createElement("p");
+      para.textContent = p.text;           // textContent: board data is never parsed as HTML
+      box.appendChild(para);
+      if (p.src) {
+        const src = document.createElement("span");
+        src.className = "cb-src";
+        src.textContent = "source: " + p.src;
+        box.appendChild(src);
+      }
+    });
+    log.appendChild(box);
+    log.scrollTop = log.scrollHeight;
+    return box;
+  }
+
+  function ask(text) {
+    const q = text.trim();
+    if (!q) return;
+    addMsg("user", [{ text: q }]);
+    const typing = document.createElement("div");
+    typing.className = "cb-msg bot cb-typing";
+    typing.setAttribute("aria-label", "Assistant is typing");
+    typing.innerHTML = "<span></span><span></span><span></span>"; // constant markup only
+    log.appendChild(typing);
+    log.scrollTop = log.scrollHeight;
+    setTimeout(function () {
+      typing.remove();
+      addMsg("bot", cbAnswer(q));
+    }, reduced.matches ? 0 : 550);
+  }
+
+  function openPanel() {
+    panel.hidden = false;
+    launch.setAttribute("aria-expanded", "true");
+    launch.setAttribute("aria-label", "Close IT assistant chat");
+    if (!greeted) { greeted = true; addMsg("bot", [{ text: VOICE_GREETING }]); }
+    speak(VOICE_GREETING);                 // voice hook: fires on the user's click
+    input.focus();
+  }
+  function closePanel() {
+    panel.hidden = true;
+    launch.setAttribute("aria-expanded", "false");
+    launch.setAttribute("aria-label", "Open IT assistant chat");
+    if ("speechSynthesis" in window) { try { window.speechSynthesis.cancel(); } catch (err) { /* ignore */ } }
+    launch.focus();
+  }
+
+  ["How many tasks are overdue?", "Who is working on the cybersecurity patch?", "When is the IT meeting?", "How do I add a task?"].forEach(function (label) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "cb-chip";
+    b.textContent = label;
+    b.addEventListener("click", function () { ask(label); });
+    chips.appendChild(b);
+  });
+
+  launch.addEventListener("click", function () { if (panel.hidden) openPanel(); else closePanel(); });
+  document.getElementById("cb-close").addEventListener("click", closePanel);
+  panel.addEventListener("keydown", function (e) { if (e.key === "Escape") closePanel(); });
+  muteBtn.addEventListener("click", function () {
+    muted = !muted;
+    muteBtn.setAttribute("aria-pressed", String(muted));
+    muteBtn.setAttribute("aria-label", muted ? "Unmute voice" : "Mute voice");
+    muteBtn.title = muted ? "Unmute voice" : "Mute voice";
+    if (muted && "speechSynthesis" in window) { try { window.speechSynthesis.cancel(); } catch (err) { /* ignore */ } }
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    ask(input.value);
+    input.value = "";
+  });
+}
+
+initMeetingHook();
+initChatbot();
 </script>
 </body>
 </html>
