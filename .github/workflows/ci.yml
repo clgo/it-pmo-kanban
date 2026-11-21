@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JS syntax check
+        run: |
+          awk '/<script>/{f=1;next} /<\/script>/{f=0} f' index.html > "$RUNNER_TEMP/app.js"
+          node --check "$RUNNER_TEMP/app.js"
+
+      - name: No persistence, no stray external requests
+        run: |
+          if grep -nE "localStorage|sessionStorage|indexedDB|document\.cookie|!important|sendBeacon|WebSocket|XMLHttpRequest|@import|<script[^>]+src|<link[^>]+href=\"http" index.html; then
+            echo "::error::Forbidden pattern found in index.html"; exit 1
+          fi
+          # The only external URL allowed is the FormSubmit endpoint
+          if grep -noE "https?://[^\"' )]+" index.html | grep -v "https://formsubmit.co/ajax/"; then
+            echo "::error::Unexpected external URL in index.html"; exit 1
+          fi
+
+      - name: Secret scan (tracked files)
+        run: |
+          if git ls-files | grep -E "(^|/)(\.env.*|.*\.pem|.*\.key|id_rsa.*|credentials.*|settings\.local\.json)$"; then
+            echo "::error::Sensitive file is tracked"; exit 1
+          fi
+          if git grep -nIE "AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|xox[bp]-[A-Za-z0-9-]+|-----BEGIN [A-Z ]*PRIVATE KEY-----" -- . ':!.github/workflows/ci.yml'; then
+            echo "::error::Possible secret committed"; exit 1
+          fi
