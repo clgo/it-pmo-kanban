@@ -267,7 +267,8 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 /* Stack columns below 768px */
 @media (max-width: 767px) {
   .board { flex-direction: column; padding: var(--s3); }
-  .column { min-height: 0; }
+  /* flex-basis 0 in a column-direction container collapses columns to zero height and makes them overlap */
+  .column { flex: 0 0 auto; min-height: 0; }
   .app-header, .filters { padding-left: var(--s3); padding-right: var(--s3); }
 }
 
